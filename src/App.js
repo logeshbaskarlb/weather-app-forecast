@@ -8,7 +8,7 @@ import {
   TemperatureAndDetails,
 } from "./Components";
 // import getWeatherData from "./services/WeatherService";
-import getFormattedWeatherData from "./services/WeatherService";
+import {getFormattedWeatherData} from "./services/WeatherService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -54,7 +54,7 @@ function App() {
             <TimeAndLocation weather={weather} />
 
             <Forecast title={"hourly forecast"} items={weather.hourly} />
-            <Forecast title={"daily forecast"} items={weather.daily} />
+            <Forecast title={"daily forecast"}  items={weather.daily} />
           </>
         )}
       </div>

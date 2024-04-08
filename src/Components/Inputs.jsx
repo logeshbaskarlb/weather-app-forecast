@@ -3,38 +3,45 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 const Inputs = ({ setQuery, units, setUnits }) => {
-  const [city,setCity] = useState("");
+  const [city, setCity] = useState("");
 
-  const handleSearchClick = () =>  {
-    if(city !== "") setQuery({q:"london"})
-  }
-
-  const handleLocationClick = () =>{
-    if(navigator.geolocation){
-      toast.info("Fetching the location")
-      navigator.geolocation.getCurrentPosition((position)=>{
-        toast.success("Location was successfully fetched")
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-
-        setQuery({
-          lat,lon
-        })
-      })
+  const handleSearchClick = () => {
+    if (city !== "") {
+      setQuery({ q: city }); // Use the entered city in the search query
     }
-  }
+  };
 
-  const handleUnitsChange = (e) => {
-    const selectedUnits = e.currrentTarget.name
-    if(units !== selectedUnits ) setUnits(selectedUnits);
-  }
+  const handleLocationClick = () => {
+    if (navigator.geolocation) {
+      toast.info("Fetching your location...");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          toast.success("Location fetched successfully!");
+          const { latitude: lat, longitude: lon } = position.coords;
+          setQuery({ lat, lon }); // Set query with current location coordinates
+        },
+        (error) => {
+          console.error("Error fetching location:", error);
+          toast.error("Failed to fetch your location.");
+        }
+      );
+    } else {
+      toast.error("Geolocation is not supported by your browser.");
+    }
+  };
+
+  const handleUnitsChange = (selectedUnits) => {
+    if (units !== selectedUnits) {
+      setUnits(selectedUnits); // Update units state
+    }
+  };
 
   return (
     <div className="flex flex-row justify-center my-6">
       <div className="flex flex-row w-3/4 items-center justify-center space-x-4">
         <input
-        value={city}
-        onChange={(e)=> setCity(e.target.value)}
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
           type="text"
           placeholder="Search for a location"
           className="text-xl font-light p-2 w-full shadow-xl capitalize focus:outline-none placeholder:lowercase"
@@ -51,18 +58,21 @@ const Inputs = ({ setQuery, units, setUnits }) => {
         />
       </div>
 
-      <div className="flex flex-row w-1/4 items-center justify-center  ">
+      <div className="flex flex-row w-1/4 items-center justify-center">
         <button
-          name="metric"
-          className="text-xl text-white font-light transition ease-in-out  hover:scale-125 "
-          onClick={handleUnitsChange}
+          className={`text-xl text-white font-light transition ease-in-out hover:scale-125 ${
+            units === "metric" ? "font-bold" : ""
+          }`}
+          onClick={() => handleUnitsChange("metric")}
         >
           °C
         </button>
-        <p className="text-xl text-white mx-1 ">|</p>
+        <p className="text-xl text-white mx-1">|</p>
         <button
-          name="imperial"
-          className="text-xl text-white font-light transition ease-in-out  hover:scale-125"
+          className={`text-xl text-white font-light transition ease-in-out hover:scale-125 ${
+            units === "imperial" ? "font-bold" : ""
+          }`}
+          onClick={() => handleUnitsChange("imperial")}
         >
           °F
         </button>

@@ -1,17 +1,19 @@
+import React from "react";
 import { formatToLocalTime } from "../services/WeatherService";
 
 const TimeAndLocation = ({ weather: { dt, timezone, name, country } }) => {
+  const formattedLocalTime = formatToLocalTime(dt, timezone);
+
   return (
-    <div className="">
-      <div className="flex items-center justify-center my-6">
-        <p className="text-white text-xl font-extralight">
-          {formatToLocalTime(dt, timezone)}
+    <div className="text-center text-white">
+      <div className="my-6">
+        <p className="text-xl font-light">
+          {formattedLocalTime || "Local time not available"}
         </p>
       </div>
-
-      <div className="flex items-center justify-center my-3">
-        <p className="text-white text-3xl font-medium">
-          {`${name}, ${country}`}
+      <div className="my-3">
+        <p className="text-3xl font-medium">
+          {name}, {country}
         </p>
       </div>
     </div>
