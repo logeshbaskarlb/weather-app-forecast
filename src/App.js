@@ -42,7 +42,8 @@ function App() {
   return (
     <>
       <div
-        className={`mx-auto max-w-screen-md mt-4 p-5 px-32 bg-gradient-to-br from-cyan-700 to-blue-700 h-fit shadow-xl
+        className={`mx-auto h-full  max-w-screen-md mt-4 p-5 px-32 bg-gradient-to-br from-cyan-700 to-blue-700
+         w-full shadow-xl
       ${formatBgColor()}`}
       >
         <TopButton setQuery={setQuery} />
@@ -53,8 +54,8 @@ function App() {
             <TemperatureAndDetails weather={weather} />
             <TimeAndLocation weather={weather} />
 
-            <Forecast title={"hourly forecast"} items={weather.hourly} />
-            <Forecast title={"daily forecast"}  items={weather.daily} />
+            {/* <Forecast title={"hourly forecast"} items={weather.hourly} />
+            <Forecast title={"daily forecast"}  items={weather.daily} /> */}
           </>
         )}
       </div>

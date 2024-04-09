@@ -5,13 +5,14 @@ const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
 // https://api.openweathermap.org/data/2.5/onecall?lat=48.853&lon=2.3488&exclude=current,minutely,alerts&appid=a9aa4c4157fe9559405e9298ed44e742&units=metric
 
-
 const getWeatherData = async (infoType, searchParams) => {
   try {
-    const url = `${BASE_URL}/${infoType}?${new URLSearchParams({
-      ...searchParams,
-      appid: API_KEY,
-    })}`;
+    const url = new URL(BASE_URL + "/" + infoType)
+    url.search = new URLSearchParams({...searchParams, appid :API_KEY})
+    // const url = `${BASE_URL}/${infoType}?${new URLSearchParams({
+    //   ...searchParams,
+    //   appid: API_KEY,
+    // })}`;
     const response = await fetch(url);
     const data = await response.json();
 
@@ -72,14 +73,16 @@ const formatCurrentWeather = (data) => {
 };
 
 const formatForecastWeather = (data) => {
+  console.log(data);
   try {
-    if (!data) {
-      console.error("Error: Data is null or undefined.");
+    if (!data || !data.timezone || !Array.isArray(data.daily) || !Array.isArray(data.hourly)) {
+      console.error("Error: Invalid data format or missing properties.");
       return null;
     }
-    console.log(data);
 
     let { timezone, daily, hourly } = data;
+
+    // Ensure at least one item in daily and hourly arrays before slicing
     daily = daily.slice(1, 6).map((d) => ({
       title: formatToLocalTime(d.dt, timezone, "ccc"),
       temp: d.temp.day,
@@ -99,24 +102,24 @@ const formatForecastWeather = (data) => {
   }
 };
 
+
 const getFormattedWeatherData = async (searchParams) => {
   try {
     const formattedCurrentWeather = await getWeatherData(
       "weather",
       searchParams
     ).then(formatCurrentWeather);
-
     const { lat, lon } = formattedCurrentWeather;
-
+    
     const formattedForecastWeather = await getWeatherData("onecall", {
       lat,
       lon,
-      exclude: "current,minutely,alerts",
+      exclude: "current,minutely,hourly,alerts",
       units: searchParams.units,
     }).then(formatForecastWeather);
+    console.log(formattedForecastWeather);
 
-    return formattedCurrentWeather;
-    // { ...formattedCurrentWeather, ...formattedForecastWeather };
+    return { ...formattedCurrentWeather, ...formattedForecastWeather };
   } catch (error) {
     console.error("Error getting formatted weather data:", error);
     return null;

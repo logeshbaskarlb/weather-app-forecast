@@ -15,7 +15,7 @@ const Forecast = ({ title, items }) => {
       <hr className="my-1" />
 
       <div className="flex flex-row items-center justify-between text-white">
-        {/* {items.map((item, index) => (
+        {items.map((item, index) => (
           <div key={index} className="flex flex-col items-center justify-center">
             <p className="text-sm font-light">
               {item.title}
@@ -23,7 +23,7 @@ const Forecast = ({ title, items }) => {
             <img src={iconUrlFromCode(item.icon)} alt="" className="w-12 my-1" />
             <p className="font-medium">{`${item.temp.toFixed(1)}°`}</p>
           </div>
-        ))} */}
+        ))}
       </div>
     </div>
   );
