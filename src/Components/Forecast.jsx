@@ -2,10 +2,10 @@ import React from "react";
 import { iconUrlFromCode } from "../services/WeatherService";
 
 const Forecast = ({ title, items }) => {
-  if (!items) {
-    console.error('Items is undefined.');
-    return <p className="text-white">No forecast data available.</p>;
-  }
+  // if (!items) {
+  //   console.error('Items is undefined.');
+  //   return <p className="text-white">No forecast data available.</p>;
+  // }
 
   return (
     <div className="mt-6">
